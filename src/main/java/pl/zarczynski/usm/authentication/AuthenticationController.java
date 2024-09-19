@@ -1,5 +1,11 @@
 package pl.zarczynski.usm.authentication;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -9,17 +15,24 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import pl.zarczynski.usm.configuration.jwt.JwtService;
 import pl.zarczynski.usm.configuration.user.User;
+import pl.zarczynski.usm.exceptions.ProblemDetailSchema;
 
 @RequestMapping("/auth")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Authentication", description = "Authentication API")
 public class AuthenticationController {
 	private final AuthenticationService authenticationService;
 	private final JwtService jwtService;
 	private final UserDetailsService userDetailsService;
 
 	@PostMapping("/signup")
+	@Operation(description = "Register user")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = RegisterUserResponse.class), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ProblemDetailSchema.class), mediaType = "application/json")),
+	})
 	public ResponseEntity<RegisterUserResponse> registerUser (@RequestBody RegisterUserRequest dto) {
 		log.info("Registering user: {}", dto);
 		User registeredUser = authenticationService.signUp(dto);
@@ -29,6 +42,11 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/login")
+	@Operation(description = "Login")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = LoginUserResponse.class), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ProblemDetailSchema.class), mediaType = "application/json")),
+	})
 	public ResponseEntity<LoginUserResponse> loginUser (@RequestBody LoginUserRequest dto) {
 		log.info("Authenticating user: {}", dto.getEmail());
 		User authenticatedUser = authenticationService.authenticate(dto);
@@ -39,6 +57,11 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/refresh")
+	@Operation(description = "Refresh user token")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = LoginUserResponse.class), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ProblemDetailSchema.class), mediaType = "application/json")),
+	})
 	public ResponseEntity<LoginUserResponse> refreshToken (@RequestHeader("Authorization") String authHeader) {
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 			throw new BadCredentialsException("Invalid token");
