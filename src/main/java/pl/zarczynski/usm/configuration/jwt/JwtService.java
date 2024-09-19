@@ -1,6 +1,7 @@
 package pl.zarczynski.usm.configuration.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -61,16 +62,31 @@ public class JwtService {
 		return extractExpiration(token).before(new Date());
 	}
 
-	private Date extractExpiration (String token) {
+	public Date extractExpiration (String token) {
 		return extractClaim(token, Claims::getExpiration);
 	}
 
 	private Claims extractAllClaims (String token) {
-		return Jwts.parser().verifyWith((SecretKey) getSignInKey()).build().parseSignedClaims(token).getPayload();
+		try {
+			return Jwts.parser().verifyWith((SecretKey) getSignInKey()).build().parseSignedClaims(token).getPayload();
+		} catch (JwtException e) {
+			throw new RuntimeException("Invalid JWT Token");
+		}
 	}
 
 	private Key getSignInKey () {
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		return Keys.hmacShaKeyFor(keyBytes);
+	}
+
+	public String refreshToken (String token) {
+		Claims claims = extractAllClaims(token);
+		return Jwts.builder()
+				.claims(claims)
+				.subject(claims.getSubject())
+				.issuedAt(new Date(System.currentTimeMillis()))
+				.expiration(new Date(System.currentTimeMillis() + jwtExpirationTime))
+				.signWith(getSignInKey())
+				.compact();
 	}
 }
