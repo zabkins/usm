@@ -12,6 +12,6 @@ public class TaskDto {
 	private String description;
 	private String dateFrom;
 	private String dateTo;
-	private String status;
+	private TaskStatus status;
 	private List<SubTaskDto> subTasks;
 }

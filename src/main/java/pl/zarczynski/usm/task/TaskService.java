@@ -15,10 +15,21 @@ public class TaskService {
 	private final TaskMapper taskMapper;
 
 	public List<TaskDto> findTasks() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		User currentUser = (User) authentication.getPrincipal();
+		User currentUser = getCurrentUser();
 		return taskRepository.findAllByUser(currentUser).stream()
 				.map(taskMapper::toDto)
 				.toList();
+	}
+
+	public TaskDto saveTask (CreateTaskDto taskDto) {
+		Task task = taskMapper.fromDto(taskDto);
+		task.setUser(getCurrentUser());
+		Task savedTask = taskRepository.save(task);
+		return taskMapper.toDto(savedTask);
+	}
+
+	private User getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return  (User) authentication.getPrincipal();
 	}
 }
