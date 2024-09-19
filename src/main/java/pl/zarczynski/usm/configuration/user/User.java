@@ -32,6 +32,7 @@ public class User implements UserDetails {
 	private String email;
 
 	@Column(nullable = false)
+	@ToString.Exclude
 	private String password;
 
 	@CreationTimestamp

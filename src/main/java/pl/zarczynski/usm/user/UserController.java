@@ -1,6 +1,7 @@
 package pl.zarczynski.usm.user;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
 	private final JwtService jwtService;
@@ -26,6 +28,7 @@ public class UserController {
 	public ResponseEntity<UserInfoDto> authenticatedUser (@RequestHeader("Authorization") String authHeader) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		User currentUser = (User) authentication.getPrincipal();
+		log.info("Preparing information about user {}", currentUser.getUsername());
 		Date expirationDate = jwtService.extractExpiration(authHeader.substring(7));
 		long secondsUntilExpiration = (expirationDate.getTime() - System.currentTimeMillis()) / 1000;
 		UserInfoDto dto = UserInfoDto.builder()
@@ -35,6 +38,7 @@ public class UserController {
 				.isExpired(!currentUser.isAccountNonExpired())
 				.expiration(expirationDate + ". Valid for: " + secondsUntilExpiration + "s")
 				.build();
+		log.info("Returning information about user {}", dto);
 		return ResponseEntity.ok(dto);
 	}
 }
