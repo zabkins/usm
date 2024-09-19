@@ -2,6 +2,7 @@ package pl.zarczynski.usm.authentication;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,9 @@ public class AuthenticationService {
 		user.setFullName(dto.getFullName());
 		user.setEmail(dto.getEmail());
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
+		if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+			throw new BadCredentialsException("Email is already in use");
+		}
 		return userRepository.save(user);
 	}
 
