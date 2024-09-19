@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.zarczynski.usm.authentication.UserInfoDto;
+import pl.zarczynski.usm.common.DateHelper;
 import pl.zarczynski.usm.configuration.jwt.JwtService;
 import pl.zarczynski.usm.configuration.user.User;
 
@@ -34,9 +35,10 @@ public class UserController {
 		UserInfoDto dto = UserInfoDto.builder()
 				.name(currentUser.getFullName())
 				.email(currentUser.getEmail())
-				.createdAt(currentUser.getCreatedAt().toString())
+				.createdAt(DateHelper.parseDate(currentUser.getCreatedAt()))
+				.updatedAt(DateHelper.parseDate(currentUser.getUpdatedAt()))
 				.isExpired(!currentUser.isAccountNonExpired())
-				.expiration(expirationDate + ". Valid for: " + secondsUntilExpiration + "s")
+				.expiration(DateHelper.parseDate(expirationDate) + ". Valid for: " + secondsUntilExpiration + "s")
 				.build();
 		log.info("Returning information about user {}", dto);
 		return ResponseEntity.ok(dto);

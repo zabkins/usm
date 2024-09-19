@@ -3,7 +3,7 @@ package pl.zarczynski.usm.authentication;
 import lombok.Data;
 
 @Data
-public class LoginUserDto {
+public class LoginUserRequest {
 	private String email;
 	private String password;
 }

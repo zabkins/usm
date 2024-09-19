@@ -5,10 +5,14 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import pl.zarczynski.usm.common.DateHelper;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -37,11 +41,15 @@ public class User implements UserDetails {
 
 	@CreationTimestamp
 	@Column(updatable = false, name = "created_at")
-	private LocalDate createdAt;
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss z")
+	@ToString.Exclude
+	private ZonedDateTime createdAt;
 
 	@UpdateTimestamp
 	@Column(name = "updated_at")
-	private LocalDate updatedAt;
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss z")
+	@ToString.Exclude
+	private ZonedDateTime updatedAt;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities () {
@@ -56,6 +64,16 @@ public class User implements UserDetails {
 	@Override
 	public String getUsername () {
 		return email;
+	}
+
+	@ToString.Include(name = "createdAt")
+	private String formatCreatedAtDate() {
+		return DateHelper.parseDate(createdAt);
+	}
+
+	@ToString.Include(name = "updatedAt")
+	private String formatUpdatedAtDate() {
+		return DateHelper.parseDate(updatedAt);
 	}
 
 	@Override

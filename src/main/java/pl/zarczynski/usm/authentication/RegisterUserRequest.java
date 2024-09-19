@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-public class RegisterUserDto {
+public class RegisterUserRequest {
 	private String email;
 	@ToString.Exclude
 	private String password;

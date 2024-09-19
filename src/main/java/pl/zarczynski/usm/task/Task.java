@@ -3,6 +3,7 @@ package pl.zarczynski.usm.task;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
+import pl.zarczynski.usm.configuration.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +19,9 @@ public class Task {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@ToString.Exclude
+	private User user;
 	private String name;
 	private String description;
 	private LocalDateTime createdAt;

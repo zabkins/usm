@@ -17,7 +17,7 @@ public class AuthenticationService {
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 
-	public User signUp (RegisterUserDto dto) {
+	public User signUp (RegisterUserRequest dto) {
 		User user = new User();
 		user.setFullName(dto.getFullName());
 		user.setEmail(dto.getEmail());
@@ -25,7 +25,7 @@ public class AuthenticationService {
 		return userRepository.save(user);
 	}
 
-	public User authenticate (LoginUserDto dto) {
+	public User authenticate (LoginUserRequest dto) {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()));
 		return userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new UsernameNotFoundException(dto.getEmail()));
 	}

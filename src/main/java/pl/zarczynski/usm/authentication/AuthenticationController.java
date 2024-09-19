@@ -1,6 +1,5 @@
 package pl.zarczynski.usm.authentication;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,25 +20,26 @@ public class AuthenticationController {
 	private final UserDetailsService userDetailsService;
 
 	@PostMapping("/signup")
-	public ResponseEntity<User> registerUser (@RequestBody RegisterUserDto dto) {
+	public ResponseEntity<RegisterUserResponse> registerUser (@RequestBody RegisterUserRequest dto) {
 		log.info("Registering user: {}", dto);
 		User registeredUser = authenticationService.signUp(dto);
-		log.info("Registered user: {}", registeredUser);
-		return ResponseEntity.ok(registeredUser);
+		RegisterUserResponse response = new RegisterUserResponse(registeredUser);
+		log.info("Registered user: {}", response);
+		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<LoginResponse> loginUser (@RequestBody LoginUserDto dto) {
-		log.info("Authenticating user: {}", dto);
+	public ResponseEntity<LoginUserResponse> loginUser (@RequestBody LoginUserRequest dto) {
+		log.info("Authenticating user: {}", dto.getEmail());
 		User authenticatedUser = authenticationService.authenticate(dto);
 		String jwtToken = jwtService.generateToken(authenticatedUser);
-		LoginResponse loginResponse = LoginResponse.builder().token(jwtToken).expiresIn(jwtService.getJwtExpirationTime()).build();
+		LoginUserResponse loginUserResponse = new LoginUserResponse(jwtToken, jwtService.getJwtExpirationTime());
 		log.info("Authenticated user: {}", authenticatedUser);
-		return ResponseEntity.ok(loginResponse);
+		return ResponseEntity.ok(loginUserResponse);
 	}
 
 	@PostMapping("/refresh")
-	public ResponseEntity<LoginResponse> refreshToken (@RequestHeader("Authorization") String authHeader) {
+	public ResponseEntity<LoginUserResponse> refreshToken (@RequestHeader("Authorization") String authHeader) {
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 			throw new BadCredentialsException("Invalid token");
 		}
@@ -51,9 +51,9 @@ public class AuthenticationController {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
 			if (jwtService.isTokenValid(token, userDetails)) {
 				String refreshedToken = jwtService.refreshToken(token);
-				LoginResponse loginResponse = LoginResponse.builder().token(refreshedToken).expiresIn(jwtService.getJwtExpirationTime()).build();
+				LoginUserResponse loginUserResponse = new LoginUserResponse(refreshedToken, jwtService.getJwtExpirationTime());
 				log.info("Refreshed token for User {} successfully.", userName);
-				return ResponseEntity.ok(loginResponse);
+				return ResponseEntity.ok(loginUserResponse);
 			}
 		}
 		log.error("Token refresh for user {} unsuccessful", userName);
