@@ -1,8 +1,9 @@
-package pl.zarczynski.usm.task;
+package pl.zarczynski.usm.task.subtask;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
+import pl.zarczynski.usm.task.Task;
 
 import java.util.Objects;
 
@@ -18,7 +19,7 @@ public class SubTask {
 	private Long id;
 	private String name;
 	private String description;
-	private Boolean isDone;
+	private boolean isDone;
 	@ManyToOne
 	@JoinColumn(name = "task_id")
 	private Task task;

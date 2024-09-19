@@ -2,10 +2,15 @@ package pl.zarczynski.usm.task;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.format.annotation.DateTimeFormat;
 import pl.zarczynski.usm.configuration.user.User;
+import pl.zarczynski.usm.task.subtask.SubTask;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,10 +29,16 @@ public class Task {
 	private User user;
 	private String name;
 	private String description;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
-	private LocalDateTime dateFrom;
-	private LocalDateTime dateTo;
+	@CreationTimestamp
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss z")
+	private ZonedDateTime createdAt;
+	@UpdateTimestamp
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss z")
+	private ZonedDateTime updatedAt;
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss z")
+	private ZonedDateTime dateFrom;
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss z")
+	private ZonedDateTime dateTo;
 	@Enumerated(EnumType.STRING)
 	private TaskStatus status;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
