@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.zarczynski.usm.task.dto.UpdateTaskDto;
 import pl.zarczynski.usm.task.service.DtoValidator;
 import pl.zarczynski.usm.task.dto.CreateTaskDto;
 import pl.zarczynski.usm.task.dto.TaskDto;
@@ -45,7 +46,8 @@ public class TaskController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto){
-		return ResponseEntity.ok(null);
+	public ResponseEntity<TaskDto> updateTask(@RequestBody UpdateTaskDto taskDto){
+		dtoValidator.validate(taskDto);
+		return ResponseEntity.ok(taskService.updateTask(taskDto));
 	}
 }

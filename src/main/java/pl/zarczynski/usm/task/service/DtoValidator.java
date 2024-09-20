@@ -4,6 +4,8 @@ import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Service;
 import pl.zarczynski.usm.common.DateHelper;
 import pl.zarczynski.usm.task.dto.CreateTaskDto;
+import pl.zarczynski.usm.task.dto.TaskDto;
+import pl.zarczynski.usm.task.dto.UpdateTaskDto;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
@@ -11,22 +13,32 @@ import java.time.format.DateTimeParseException;
 @Service
 public class DtoValidator {
 
-	public void validate (CreateTaskDto createTaskDto) {
-		if (createTaskDto.getName() == null || createTaskDto.getName().isEmpty()) {
-			throw new ValidationException("Name must not be null or empty");
+	public void validate (CreateTaskDto dto) {
+		validateNotNullAndNotEmpty(dto.getName(), "name");
+		validateNotNullAndNotEmpty(dto.getDescription(), "description");
+		validateNotNullAndNotEmpty(dto.getStartDate(), "startDate");
+		validateNotNullAndNotEmpty(dto.getFinishDate(), "finishDate");
+		validateDates(dto.getStartDate(), dto.getFinishDate());
+	}
+
+	public void validate (UpdateTaskDto dto) {
+		validateNotNullAndNotEmpty(dto.getId().toString(), "ID");
+		validateNotNullAndNotEmpty(dto.getName(), "name");
+		validateNotNullAndNotEmpty(dto.getDescription(), "description");
+		validateNotNullAndNotEmpty(dto.getStartDate(), "startDate");
+		validateNotNullAndNotEmpty(dto.getFinishDate(), "finishDate");
+		validateDates(dto.getStartDate(), dto.getFinishDate());
+	}
+
+	private void validateNotNullAndNotEmpty(String fieldValue, String fieldName) {
+		if (fieldValue == null || fieldValue.isEmpty()) {
+			throw new ValidationException(fieldName + " must not be null or empty");
 		}
-		if (createTaskDto.getDescription() == null || createTaskDto.getDescription().isEmpty()) {
-			throw new ValidationException("Description must not be null or empty");
-		}
-		if (createTaskDto.getStartDate() == null || createTaskDto.getStartDate().isEmpty()) {
-			throw new ValidationException("StartDate must not be null or empty");
-		}
-		if (createTaskDto.getFinishDate() == null || createTaskDto.getFinishDate().isEmpty()) {
-			throw new ValidationException("FinishDate must not be null or empty");
-		}
+	}
+	private void validateDates(String startDateString, String finishDateString) {
 		try {
-			ZonedDateTime startDate = DateHelper.parseStringToZonedDateTime(createTaskDto.getStartDate());
-			ZonedDateTime finishDate = DateHelper.parseStringToZonedDateTime(createTaskDto.getFinishDate());
+			ZonedDateTime startDate = DateHelper.parseStringToZonedDateTime(startDateString);
+			ZonedDateTime finishDate = DateHelper.parseStringToZonedDateTime(finishDateString);
 			if (finishDate.isBefore(ZonedDateTime.now())) {
 				throw new ValidationException("FinishDate cannot be in the past");
 			}
