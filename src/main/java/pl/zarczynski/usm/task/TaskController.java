@@ -1,6 +1,7 @@
 package pl.zarczynski.usm.task;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 public class TaskController {
 
 	private final TaskService taskService;
+	private final DtoValidator dtoValidator;
 
 	@GetMapping("/{id}")
 	public ResponseEntity<TaskDto> getTask(@PathVariable Long id){
@@ -29,6 +31,7 @@ public class TaskController {
 
 	@PostMapping()
 	public ResponseEntity<TaskDto> createTask(@RequestBody CreateTaskDto taskDto){
+		dtoValidator.validate(taskDto);
 		return ResponseEntity.ok(taskService.saveTask(taskDto));
 	}
 }

@@ -1,7 +1,7 @@
 package pl.zarczynski.usm.exceptions;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import org.springframework.beans.factory.parsing.Problem;
+import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.authentication.AccountStatusException;
@@ -17,6 +17,10 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = {Exception.class})
 	public ProblemDetail handleSecurityException (Exception exception) {
 		ProblemDetail errorDetail = null;
+		if (exception instanceof ValidationException) {
+			errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
+			errorDetail.setProperty("description", "Request input is invalid");
+		}
 		if (exception instanceof BadCredentialsException) {
 			errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), exception.getMessage());
 			errorDetail.setProperty("description", "The username or password is incorrect");

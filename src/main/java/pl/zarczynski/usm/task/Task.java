@@ -9,7 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import pl.zarczynski.usm.configuration.user.User;
 import pl.zarczynski.usm.task.subtask.SubTask;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -36,9 +35,9 @@ public class Task {
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss z")
 	private ZonedDateTime updatedAt;
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss z")
-	private ZonedDateTime dateFrom;
+	private ZonedDateTime startDate;
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss z")
-	private ZonedDateTime dateTo;
+	private ZonedDateTime finishDate;
 	@Enumerated(EnumType.STRING)
 	private TaskStatus status;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "task")

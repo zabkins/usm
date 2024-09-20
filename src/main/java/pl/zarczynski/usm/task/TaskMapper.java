@@ -6,6 +6,8 @@ import pl.zarczynski.usm.task.subtask.CreateSubTaskDto;
 import pl.zarczynski.usm.task.subtask.SubTask;
 import pl.zarczynski.usm.task.subtask.SubTaskDto;
 
+import java.time.ZonedDateTime;
+
 @Service
 public class TaskMapper {
 
@@ -14,10 +16,10 @@ public class TaskMapper {
 		dto.setId(task.getId());
 		dto.setName(task.getName());
 		dto.setDescription(task.getDescription());
-		dto.setDateFrom(task.getDateFrom() != null ? DateHelper.parseDate(task.getDateFrom()) : null);
-		dto.setDateTo(task.getDateTo() != null ? DateHelper.parseDate(task.getDateTo()) : null);
+		dto.setDateFrom(DateHelper.parseDate(task.getStartDate()));
+		dto.setDateTo(DateHelper.parseDate(task.getFinishDate()));
 		dto.setStatus(task.getStatus());
-		if (task.getSubTasks() != null) {
+		if (task.getSubTasks() != null && !task.getSubTasks().isEmpty()) {
 			dto.setSubTasks(task.getSubTasks().stream()
 					.map(this::toDto)
 					.toList());
@@ -29,6 +31,7 @@ public class TaskMapper {
 		SubTaskDto dto = new SubTaskDto();
 		dto.setId(subTask.getId());
 		dto.setName(subTask.getName());
+		dto.setDescription(subTask.getDescription());
 		dto.setDone(subTask.isDone());
 		return dto;
 	}
@@ -37,10 +40,10 @@ public class TaskMapper {
 		Task task = new Task();
 		task.setName(taskDto.getName());
 		task.setDescription(taskDto.getDescription());
-		task.setDateFrom(taskDto.getDateFrom());
-		task.setDateTo(taskDto.getDateTo());
-		task.setStatus(taskDto.getStatus());
-		if (taskDto.getSubTasks() != null) {
+		task.setStartDate(DateHelper.parseStringToZonedDateTime(taskDto.getPlannedStartDate()));
+		task.setFinishDate(DateHelper.parseStringToZonedDateTime(taskDto.getPlannedFinishDate()));
+		task.setStatus(TaskStatus.PLANNED);
+		if (taskDto.getSubTasks() != null && !taskDto.getSubTasks().isEmpty()) {
 			task.setSubTasks(taskDto.getSubTasks().stream()
 					.map(subTaskDto -> {
 						SubTask subTask = fromDto(subTaskDto);
