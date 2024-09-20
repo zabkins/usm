@@ -1,6 +1,7 @@
 package pl.zarczynski.usm.exceptions;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -17,6 +18,10 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = {Exception.class})
 	public ProblemDetail handleSecurityException (Exception exception) {
 		ProblemDetail errorDetail = null;
+		if (exception instanceof EntityNotFoundException) {
+			errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), exception.getMessage());
+			errorDetail.setProperty("description", "Resource not found");
+		}
 		if (exception instanceof ValidationException) {
 			errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
 			errorDetail.setProperty("description", "Request input is invalid");

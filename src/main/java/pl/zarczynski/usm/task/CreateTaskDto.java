@@ -9,7 +9,7 @@ import java.util.List;
 public class CreateTaskDto {
 	private String name;
 	private String description;
-	private String plannedStartDate;
-	private String plannedFinishDate;
+	private String startDate;
+	private String finishDate;
 	private List<CreateSubTaskDto> subTasks;
 }

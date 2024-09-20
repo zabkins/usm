@@ -6,8 +6,6 @@ import pl.zarczynski.usm.task.subtask.CreateSubTaskDto;
 import pl.zarczynski.usm.task.subtask.SubTask;
 import pl.zarczynski.usm.task.subtask.SubTaskDto;
 
-import java.time.ZonedDateTime;
-
 @Service
 public class TaskMapper {
 
@@ -40,8 +38,8 @@ public class TaskMapper {
 		Task task = new Task();
 		task.setName(taskDto.getName());
 		task.setDescription(taskDto.getDescription());
-		task.setStartDate(DateHelper.parseStringToZonedDateTime(taskDto.getPlannedStartDate()));
-		task.setFinishDate(DateHelper.parseStringToZonedDateTime(taskDto.getPlannedFinishDate()));
+		task.setStartDate(DateHelper.parseStringToZonedDateTime(taskDto.getStartDate()));
+		task.setFinishDate(DateHelper.parseStringToZonedDateTime(taskDto.getFinishDate()));
 		task.setStatus(TaskStatus.PLANNED);
 		if (taskDto.getSubTasks() != null && !taskDto.getSubTasks().isEmpty()) {
 			task.setSubTasks(taskDto.getSubTasks().stream()

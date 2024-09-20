@@ -21,7 +21,7 @@ public class TaskController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<TaskDto> getTask(@PathVariable Long id){
-		return null;
+		return ResponseEntity.ok(taskService.findTask(id));
 	}
 
 	@GetMapping()

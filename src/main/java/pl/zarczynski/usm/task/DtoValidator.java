@@ -17,15 +17,15 @@ public class DtoValidator {
 		if (createTaskDto.getDescription() == null || createTaskDto.getDescription().isEmpty()) {
 			throw new ValidationException("Description must not be null or empty");
 		}
-		if (createTaskDto.getPlannedStartDate() == null || createTaskDto.getPlannedStartDate().isEmpty()) {
+		if (createTaskDto.getStartDate() == null || createTaskDto.getStartDate().isEmpty()) {
 			throw new ValidationException("StartDate must not be null or empty");
 		}
-		if (createTaskDto.getPlannedFinishDate() == null || createTaskDto.getPlannedFinishDate().isEmpty()) {
+		if (createTaskDto.getFinishDate() == null || createTaskDto.getFinishDate().isEmpty()) {
 			throw new ValidationException("FinishDate must not be null or empty");
 		}
 		try {
-			ZonedDateTime startDate = DateHelper.parseStringToZonedDateTime(createTaskDto.getPlannedStartDate());
-			ZonedDateTime finishDate = DateHelper.parseStringToZonedDateTime(createTaskDto.getPlannedFinishDate());
+			ZonedDateTime startDate = DateHelper.parseStringToZonedDateTime(createTaskDto.getStartDate());
+			ZonedDateTime finishDate = DateHelper.parseStringToZonedDateTime(createTaskDto.getFinishDate());
 			if (finishDate.isBefore(ZonedDateTime.now())) {
 				throw new ValidationException("FinishDate cannot be in the past");
 			}
