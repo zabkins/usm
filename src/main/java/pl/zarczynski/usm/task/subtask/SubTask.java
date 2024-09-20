@@ -3,7 +3,7 @@ package pl.zarczynski.usm.task.subtask;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
-import pl.zarczynski.usm.task.Task;
+import pl.zarczynski.usm.task.entity.Task;
 
 import java.util.Objects;
 

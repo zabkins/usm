@@ -1,4 +1,4 @@
-package pl.zarczynski.usm.task;
+package pl.zarczynski.usm.task.dto;
 
 import lombok.Data;
 import pl.zarczynski.usm.task.subtask.CreateSubTaskDto;

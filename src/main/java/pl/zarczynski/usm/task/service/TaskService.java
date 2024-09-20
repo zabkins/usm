@@ -1,15 +1,16 @@
-package pl.zarczynski.usm.task;
+package pl.zarczynski.usm.task.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.zarczynski.usm.configuration.user.User;
+import pl.zarczynski.usm.task.dto.CreateTaskDto;
+import pl.zarczynski.usm.task.entity.Task;
+import pl.zarczynski.usm.task.dto.TaskDto;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +40,10 @@ public class TaskService {
 	private User getCurrentUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return  (User) authentication.getPrincipal();
+	}
+
+	public void deleteTask (Long id) {
+		Task task = taskRepository.findByIdAndUser(id, getCurrentUser()).orElseThrow(() -> new EntityNotFoundException("Task with ID [" + id + "] not found"));
+		taskRepository.delete(task);
 	}
 }

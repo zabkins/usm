@@ -1,7 +1,11 @@
-package pl.zarczynski.usm.task;
+package pl.zarczynski.usm.task.service;
 
 import org.springframework.stereotype.Service;
 import pl.zarczynski.usm.common.DateHelper;
+import pl.zarczynski.usm.task.dto.TaskDto;
+import pl.zarczynski.usm.task.entity.TaskStatus;
+import pl.zarczynski.usm.task.dto.CreateTaskDto;
+import pl.zarczynski.usm.task.entity.Task;
 import pl.zarczynski.usm.task.subtask.CreateSubTaskDto;
 import pl.zarczynski.usm.task.subtask.SubTask;
 import pl.zarczynski.usm.task.subtask.SubTaskDto;

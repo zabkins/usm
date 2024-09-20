@@ -1,4 +1,4 @@
-package pl.zarczynski.usm.task;
+package pl.zarczynski.usm.task.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

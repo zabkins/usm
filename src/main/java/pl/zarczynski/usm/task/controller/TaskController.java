@@ -1,11 +1,14 @@
-package pl.zarczynski.usm.task;
+package pl.zarczynski.usm.task.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.zarczynski.usm.task.service.DtoValidator;
+import pl.zarczynski.usm.task.dto.CreateTaskDto;
+import pl.zarczynski.usm.task.dto.TaskDto;
+import pl.zarczynski.usm.task.service.TaskService;
 
 import java.util.List;
 
@@ -33,5 +36,16 @@ public class TaskController {
 	public ResponseEntity<TaskDto> createTask(@RequestBody CreateTaskDto taskDto){
 		dtoValidator.validate(taskDto);
 		return ResponseEntity.ok(taskService.saveTask(taskDto));
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<TaskDto> deleteTask(@PathVariable Long id){
+		taskService.deleteTask(id);
+		return ResponseEntity.status(204).build();
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto){
+		return ResponseEntity.ok(null);
 	}
 }
