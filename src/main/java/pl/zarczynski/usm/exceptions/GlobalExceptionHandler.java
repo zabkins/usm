@@ -54,6 +54,11 @@ public class GlobalExceptionHandler {
 		}
 
 		if (errorDetail == null) {
+			if (exception.getMessage().equals("Invalid JWT Token")){
+				errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), exception.getMessage());
+				errorDetail.setProperty("description", "JWT provided in the request is invalid");
+				return errorDetail;
+			}
 			errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), exception.getMessage());
 			errorDetail.setProperty("description", "Unknown internal server error.");
 		}

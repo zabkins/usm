@@ -10,6 +10,8 @@ import pl.zarczynski.usm.task.subtask.CreateSubTaskDto;
 import pl.zarczynski.usm.task.subtask.SubTask;
 import pl.zarczynski.usm.task.subtask.SubTaskDto;
 
+import java.util.Collections;
+
 @Service
 public class TaskMapper {
 
@@ -25,6 +27,8 @@ public class TaskMapper {
 			dto.setSubTasks(task.getSubTasks().stream()
 					.map(this::toDto)
 					.toList());
+		} else {
+			dto.setSubTasks(Collections.emptyList());
 		}
 		return dto;
 	}
@@ -45,15 +49,6 @@ public class TaskMapper {
 		task.setStartDate(DateHelper.parseStringToZonedDateTime(taskDto.getStartDate()));
 		task.setFinishDate(DateHelper.parseStringToZonedDateTime(taskDto.getFinishDate()));
 		task.setStatus(TaskStatus.PLANNED);
-		if (taskDto.getSubTasks() != null && !taskDto.getSubTasks().isEmpty()) {
-			task.setSubTasks(taskDto.getSubTasks().stream()
-					.map(subTaskDto -> {
-						SubTask subTask = fromDto(subTaskDto);
-						subTask.setTask(task);
-						return subTask;
-					})
-					.toList());
-		}
 		return task;
 	}
 

@@ -4,7 +4,6 @@ import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Service;
 import pl.zarczynski.usm.common.DateHelper;
 import pl.zarczynski.usm.task.dto.CreateTaskDto;
-import pl.zarczynski.usm.task.dto.TaskDto;
 import pl.zarczynski.usm.task.dto.UpdateTaskDto;
 
 import java.time.ZonedDateTime;
@@ -22,11 +21,11 @@ public class DtoValidator {
 	}
 
 	public void validate (UpdateTaskDto dto) {
-		validateNotNullAndNotEmpty(dto.getId().toString(), "ID");
 		validateNotNullAndNotEmpty(dto.getName(), "name");
 		validateNotNullAndNotEmpty(dto.getDescription(), "description");
 		validateNotNullAndNotEmpty(dto.getStartDate(), "startDate");
 		validateNotNullAndNotEmpty(dto.getFinishDate(), "finishDate");
+		validateNotNull(dto.getStatus(), "status");
 		validateDates(dto.getStartDate(), dto.getFinishDate());
 	}
 
@@ -35,6 +34,13 @@ public class DtoValidator {
 			throw new ValidationException(fieldName + " must not be null or empty");
 		}
 	}
+
+	private void validateNotNull(Object fieldValue, String fieldName) {
+		if (fieldValue == null) {
+			throw new ValidationException(fieldName + " must not be null or empty");
+		}
+	}
+
 	private void validateDates(String startDateString, String finishDateString) {
 		try {
 			ZonedDateTime startDate = DateHelper.parseStringToZonedDateTime(startDateString);
