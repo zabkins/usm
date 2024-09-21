@@ -19,8 +19,8 @@ public class TaskMapper {
 		dto.setId(task.getId());
 		dto.setName(task.getName());
 		dto.setDescription(task.getDescription());
-		dto.setDateFrom(DateHelper.parseDate(task.getStartDate()));
-		dto.setDateTo(DateHelper.parseDate(task.getFinishDate()));
+		dto.setStartDate(DateHelper.parseDate(task.getStartDate()));
+		dto.setFinishDate(DateHelper.parseDate(task.getFinishDate()));
 		dto.setStatus(task.getStatus());
 		if (task.getSubTasks() != null && !task.getSubTasks().isEmpty()) {
 			dto.setSubTasks(task.getSubTasks().stream()

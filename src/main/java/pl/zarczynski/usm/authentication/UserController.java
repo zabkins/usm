@@ -1,4 +1,4 @@
-package pl.zarczynski.usm.user;
+package pl.zarczynski.usm.authentication;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.zarczynski.usm.authentication.RegisterUserResponse;
-import pl.zarczynski.usm.authentication.UserInfoDto;
 import pl.zarczynski.usm.common.DateHelper;
 import pl.zarczynski.usm.configuration.jwt.JwtService;
 import pl.zarczynski.usm.configuration.user.User;
