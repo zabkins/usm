@@ -6,18 +6,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.zarczynski.usm.common.DateHelper;
+import pl.zarczynski.usm.common.TaskMapper;
 import pl.zarczynski.usm.configuration.user.User;
 import pl.zarczynski.usm.task.dto.CreateTaskDto;
 import pl.zarczynski.usm.task.dto.TaskDto;
 import pl.zarczynski.usm.task.dto.UpdateTaskDto;
 import pl.zarczynski.usm.task.entity.Task;
-import pl.zarczynski.usm.task.subtask.SubTask;
-import pl.zarczynski.usm.task.subtask.UpdateSubTaskDto;
 
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +25,8 @@ public class TaskService {
 
 	public List<TaskDto> findTasks () {
 		User currentUser = getCurrentUser();
-		return taskRepository.findAllByUser(currentUser).stream()
+		List<Task> foundTasks = taskRepository.findAllByUser(currentUser);
+		return foundTasks.isEmpty() ? Collections.emptyList() : foundTasks.stream()
 				.map(taskMapper::toDto)
 				.toList();
 	}
@@ -83,15 +82,4 @@ public class TaskService {
 		}
 	}
 
-	private void updateSubTask (SubTask subTask, UpdateSubTaskDto subTaskDto) {
-		if (!subTask.getName().equals(subTaskDto.getName())) {
-			subTask.setName(subTaskDto.getName());
-		}
-		if (!subTask.getDescription().equals(subTaskDto.getDescription())) {
-			subTask.setDescription(subTaskDto.getDescription());
-		}
-		if (subTask.isDone() != subTaskDto.isDone()) {
-			subTask.setDone(subTaskDto.isDone());
-		}
-	}
 }

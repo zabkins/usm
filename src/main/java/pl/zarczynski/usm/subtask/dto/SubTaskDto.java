@@ -1,9 +1,11 @@
-package pl.zarczynski.usm.task.subtask;
+package pl.zarczynski.usm.subtask.dto;
 
 import lombok.Data;
 
 @Data
-public class CreateSubTaskDto {
+public class SubTaskDto {
+
+	private Long id;
 	private String name;
 	private String description;
 	private boolean isDone;

@@ -2,7 +2,7 @@ package pl.zarczynski.usm.task.dto;
 
 import lombok.Data;
 import pl.zarczynski.usm.task.entity.TaskStatus;
-import pl.zarczynski.usm.task.subtask.SubTaskDto;
+import pl.zarczynski.usm.subtask.dto.SubTaskDto;
 
 import java.util.List;
 

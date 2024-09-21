@@ -1,21 +1,20 @@
-package pl.zarczynski.usm.task.service;
+package pl.zarczynski.usm.common;
 
 import org.springframework.stereotype.Service;
-import pl.zarczynski.usm.common.DateHelper;
 import pl.zarczynski.usm.task.dto.TaskDto;
 import pl.zarczynski.usm.task.entity.TaskStatus;
 import pl.zarczynski.usm.task.dto.CreateTaskDto;
 import pl.zarczynski.usm.task.entity.Task;
-import pl.zarczynski.usm.task.subtask.CreateSubTaskDto;
-import pl.zarczynski.usm.task.subtask.SubTask;
-import pl.zarczynski.usm.task.subtask.SubTaskDto;
+import pl.zarczynski.usm.subtask.dto.CreateSubTaskDto;
+import pl.zarczynski.usm.subtask.entity.SubTask;
+import pl.zarczynski.usm.subtask.dto.SubTaskDto;
 
 import java.util.Collections;
 
 @Service
 public class TaskMapper {
 
-	TaskDto toDto (Task task) {
+	public TaskDto toDto (Task task) {
 		TaskDto dto = new TaskDto();
 		dto.setId(task.getId());
 		dto.setName(task.getName());
@@ -33,7 +32,7 @@ public class TaskMapper {
 		return dto;
 	}
 
-	SubTaskDto toDto (SubTask subTask) {
+	public SubTaskDto toDto (SubTask subTask) {
 		SubTaskDto dto = new SubTaskDto();
 		dto.setId(subTask.getId());
 		dto.setName(subTask.getName());
@@ -42,7 +41,7 @@ public class TaskMapper {
 		return dto;
 	}
 
-	Task fromDto (CreateTaskDto taskDto) {
+	public Task fromDto (CreateTaskDto taskDto) {
 		Task task = new Task();
 		task.setName(taskDto.getName());
 		task.setDescription(taskDto.getDescription());
@@ -52,11 +51,11 @@ public class TaskMapper {
 		return task;
 	}
 
-	SubTask fromDto (CreateSubTaskDto subTaskDto) {
+	public SubTask fromDto (CreateSubTaskDto subTaskDto) {
 		SubTask subTask = new SubTask();
 		subTask.setName(subTaskDto.getName());
 		subTask.setDescription(subTaskDto.getDescription());
-		subTask.setDone(subTaskDto.isDone());
+		subTask.setDone(false);
 		return subTask;
 	}
 }

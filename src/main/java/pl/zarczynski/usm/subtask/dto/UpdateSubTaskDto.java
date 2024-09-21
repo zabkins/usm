@@ -1,4 +1,4 @@
-package pl.zarczynski.usm.task.subtask;
+package pl.zarczynski.usm.subtask.dto;
 
 import lombok.Data;
 
@@ -6,5 +6,5 @@ import lombok.Data;
 public class UpdateSubTaskDto {
 	private String name;
 	private String description;
-	private boolean isDone;
+	private boolean done;
 }

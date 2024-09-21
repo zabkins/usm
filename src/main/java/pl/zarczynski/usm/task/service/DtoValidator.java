@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.zarczynski.usm.common.DateHelper;
 import pl.zarczynski.usm.task.dto.CreateTaskDto;
 import pl.zarczynski.usm.task.dto.UpdateTaskDto;
+import pl.zarczynski.usm.subtask.dto.CreateSubTaskDto;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
@@ -13,31 +14,30 @@ import java.time.format.DateTimeParseException;
 public class DtoValidator {
 
 	public void validate (CreateTaskDto dto) {
-		validateNotNullAndNotEmpty(dto.getName(), "name");
-		validateNotNullAndNotEmpty(dto.getDescription(), "description");
-		validateNotNullAndNotEmpty(dto.getStartDate(), "startDate");
-		validateNotNullAndNotEmpty(dto.getFinishDate(), "finishDate");
+		validateNotNull(dto.getName(), "name");
+		validateNotNull(dto.getDescription(), "description");
+		validateNotNull(dto.getStartDate(), "startDate");
+		validateNotNull(dto.getFinishDate(), "finishDate");
 		validateDates(dto.getStartDate(), dto.getFinishDate());
 	}
 
 	public void validate (UpdateTaskDto dto) {
-		validateNotNullAndNotEmpty(dto.getName(), "name");
-		validateNotNullAndNotEmpty(dto.getDescription(), "description");
-		validateNotNullAndNotEmpty(dto.getStartDate(), "startDate");
-		validateNotNullAndNotEmpty(dto.getFinishDate(), "finishDate");
+		validateNotNull(dto.getName(), "name");
+		validateNotNull(dto.getDescription(), "description");
+		validateNotNull(dto.getStartDate(), "startDate");
+		validateNotNull(dto.getFinishDate(), "finishDate");
 		validateNotNull(dto.getStatus(), "status");
 		validateDates(dto.getStartDate(), dto.getFinishDate());
 	}
 
-	private void validateNotNullAndNotEmpty(String fieldValue, String fieldName) {
-		if (fieldValue == null || fieldValue.isEmpty()) {
-			throw new ValidationException(fieldName + " must not be null or empty");
-		}
+	public void validate (CreateSubTaskDto subTaskDto) {
+		validateNotNull(subTaskDto.getName(), "name");
+		validateNotNull(subTaskDto.getDescription(), "description");
 	}
 
 	private void validateNotNull(Object fieldValue, String fieldName) {
 		if (fieldValue == null) {
-			throw new ValidationException(fieldName + " must not be null or empty");
+			throw new ValidationException(fieldName + " must not be null");
 		}
 	}
 

@@ -7,9 +7,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.format.annotation.DateTimeFormat;
 import pl.zarczynski.usm.configuration.user.User;
-import pl.zarczynski.usm.task.subtask.SubTask;
+import pl.zarczynski.usm.subtask.entity.SubTask;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,6 +44,13 @@ public class Task {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
 	@ToString.Exclude
 	private List<SubTask> subTasks;
+
+	public boolean addSubTask(SubTask subTask) {
+		if (this.subTasks == null) {
+			this.subTasks = new ArrayList<>();
+		}
+		return subTasks.add(subTask);
+	}
 
 	@Override
 	public final boolean equals (Object o) {
