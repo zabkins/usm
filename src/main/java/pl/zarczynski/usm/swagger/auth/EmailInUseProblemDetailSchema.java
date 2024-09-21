@@ -1,13 +1,11 @@
-package pl.zarczynski.usm.exceptions;
+package pl.zarczynski.usm.swagger.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
-import lombok.Setter;
 
 @Schema(description = "Api Error details")
 @Getter
-@Setter
-public abstract class ProblemDetailSchema {
+public abstract class EmailInUseProblemDetailSchema {
 	@Schema(name = "type", example = "about:blank")
 	private String type;
 	@Schema(name = "title", example = "Unauthorized")

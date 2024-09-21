@@ -1,16 +1,12 @@
-package pl.zarczynski.usm.task.dto;
+package pl.zarczynski.usm.swagger.task;
 
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.Getter;
 import pl.zarczynski.usm.task.entity.TaskStatus;
-import pl.zarczynski.usm.subtask.dto.SubTaskDto;
 
-import java.util.List;
-
-@Data
 @Schema(description = "DTO used for representing a task")
-public class TaskDto {
+@Getter
+public abstract class CreatedTaskSchema {
 	@Schema(description = "ID of the task", name = "id", example = "1")
 	private Long id;
 	@Schema(description = "Name of the task", name = "name", example = "Task name")
@@ -23,6 +19,6 @@ public class TaskDto {
 	private String finishDate;
 	@Schema(description = "Status of the task", name = "status", example = "PLANNED")
 	private TaskStatus status;
-	@Schema(description = "SubTasks of the task", name = "subTasks")
-	private List<SubTaskDto> subTasks;
+	@Schema(description = "SubTasks of the task", name = "subTasks", example = "[]")
+	private String subTasks;
 }

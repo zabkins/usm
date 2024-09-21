@@ -15,7 +15,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import pl.zarczynski.usm.configuration.jwt.JwtService;
 import pl.zarczynski.usm.configuration.user.User;
-import pl.zarczynski.usm.exceptions.ProblemDetailSchema;
+import pl.zarczynski.usm.swagger.auth.BadCredentialsProblemDetailSchema;
+import pl.zarczynski.usm.swagger.auth.EmailInUseProblemDetailSchema;
+import pl.zarczynski.usm.swagger.auth.InvalidEmailProblemDetailSchema;
+import pl.zarczynski.usm.swagger.auth.TokenRefreshProblemDetailSchema;
+import pl.zarczynski.usm.task.service.DtoValidator;
 
 @RequestMapping("/auth")
 @RestController
@@ -26,14 +30,17 @@ public class AuthenticationController {
 	private final AuthenticationService authenticationService;
 	private final JwtService jwtService;
 	private final UserDetailsService userDetailsService;
+	private final DtoValidator dtoValidator;
 
 	@PostMapping("/signup")
 	@Operation(description = "Register user")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = RegisterUserResponse.class), mediaType = "application/json")}),
-			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "401", content = {@Content(schema = @Schema(implementation = EmailInUseProblemDetailSchema.class), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "401", content = {@Content(schema = @Schema(implementation = InvalidEmailProblemDetailSchema.class), mediaType = "application/json")})
 	})
 	public ResponseEntity<RegisterUserResponse> registerUser (@RequestBody RegisterUserRequest dto) {
+		dtoValidator.validate(dto);
 		log.info("Registering user: {}", dto);
 		User registeredUser = authenticationService.signUp(dto);
 		RegisterUserResponse response = new RegisterUserResponse(registeredUser);
@@ -45,7 +52,7 @@ public class AuthenticationController {
 	@Operation(description = "Login")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = LoginUserResponse.class), mediaType = "application/json")}),
-			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = BadCredentialsProblemDetailSchema.class), mediaType = "application/json")),
 	})
 	public ResponseEntity<LoginUserResponse> loginUser (@RequestBody LoginUserRequest dto) {
 		log.info("Authenticating user: {}", dto.getEmail());
@@ -60,7 +67,7 @@ public class AuthenticationController {
 	@Operation(description = "Refresh user token")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = LoginUserResponse.class), mediaType = "application/json")}),
-			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = TokenRefreshProblemDetailSchema.class), mediaType = "application/json")),
 	})
 	public ResponseEntity<LoginUserResponse> refreshToken (@RequestHeader("Authorization") String authHeader) {
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.zarczynski.usm.common.DateHelper;
 import pl.zarczynski.usm.configuration.jwt.JwtService;
 import pl.zarczynski.usm.configuration.user.User;
-import pl.zarczynski.usm.exceptions.ProblemDetailSchema;
+import pl.zarczynski.usm.swagger.task.TaskNotFoundProblemDetailSchema;
 
 import java.util.Date;
 
@@ -36,7 +36,7 @@ public class UserController {
 	@Operation(description = "Get information about currently authenticated user")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = UserInfoDto.class), mediaType = "application/json")}),
-			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = TaskNotFoundProblemDetailSchema.class), mediaType = "application/json")),
 	})
 	public ResponseEntity<UserInfoDto> authenticatedUser (@RequestHeader("Authorization") String authHeader) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
