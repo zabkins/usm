@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Schema(description = "Api Error details")
 @Getter
-public abstract class TokenRefreshProblemDetailSchema {
+public abstract class InvalidJwtTokenProblemDetailSchema {
 	@Schema(name = "type", example = "about:blank")
 	private String type;
 	@Schema(name = "title", example = "Unauthorized")

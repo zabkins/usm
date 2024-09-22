@@ -16,6 +16,7 @@ import pl.zarczynski.usm.common.DtoValidator;
 import pl.zarczynski.usm.subtask.dto.CreateSubTaskDto;
 import pl.zarczynski.usm.subtask.dto.SubTaskDto;
 import pl.zarczynski.usm.subtask.dto.UpdateSubTaskDto;
+import pl.zarczynski.usm.swaggerschemas.auth.InvalidJwtTokenProblemDetailSchema;
 import pl.zarczynski.usm.swaggerschemas.subtask.SubTaskNotFoundProblemDetailSchema;
 import pl.zarczynski.usm.swaggerschemas.task.TaskNotFoundProblemDetailSchema;
 
@@ -25,7 +26,7 @@ import java.util.List;
 @RequestMapping("/tasks")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
-@Tag(name = "SubTasks", description = "SubTask related REST requests")
+@Tag(name = "SubTasks", description = "SubTask related requests")
 public class SubTaskController {
 
 	private final DtoValidator dtoValidator;
@@ -35,7 +36,8 @@ public class SubTaskController {
 	@Operation(description = "Create subtask for task with given ID")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = SubTaskDto.class), mediaType = "application/json")}),
-			@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = TaskNotFoundProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = TaskNotFoundProblemDetailSchema.class), mediaType = "application/json"))
 	})
 	public ResponseEntity<SubTaskDto> createSubTask(@PathVariable(value = "id") @Parameter(description = "Task ID", required = true) Long taskId, @RequestBody CreateSubTaskDto subTaskDto){
 		dtoValidator.validate(subTaskDto);
@@ -46,6 +48,7 @@ public class SubTaskController {
 	@Operation(description = "Get SubTask with given ID")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = SubTaskDto.class), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json")),
 			@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = SubTaskNotFoundProblemDetailSchema.class), mediaType = "application/json"))
 	})
 	public ResponseEntity<SubTaskDto> findSubTask(@PathVariable(value = "id") @Parameter(description = "SubTask ID", required = true) Long subTaskId){
@@ -56,6 +59,7 @@ public class SubTaskController {
 	@Operation(description = "Get all SubTasks for Task of given ID")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = SubTaskDto.class)), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json"))
 	})
 	public ResponseEntity<List<SubTaskDto>> findAllSubTasks(@PathVariable(value = "id") @Parameter(description = "Task ID", required = true) Long taskId){
 		return ResponseEntity.ok(subTaskService.findSubTasksForGivenTask(taskId));
@@ -65,6 +69,7 @@ public class SubTaskController {
 	@Operation(description = "Delete SubTask with given ID")
 	@ApiResponses({
 			@ApiResponse(responseCode = "204", content = {@Content()}),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json")),
 			@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = SubTaskNotFoundProblemDetailSchema.class), mediaType = "application/json"))
 	})
 	public ResponseEntity<SubTaskDto> deleteSubTask(@PathVariable(value = "id") @Parameter(description = "SubTask ID", required = true) Long subTaskId){
@@ -76,7 +81,8 @@ public class SubTaskController {
 	@Operation(description = "Update SubTask")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = SubTaskDto.class), mediaType = "application/json")}),
-			@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = SubTaskNotFoundProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = SubTaskNotFoundProblemDetailSchema.class), mediaType = "application/json"))
 	})
 	public ResponseEntity<SubTaskDto> updateSubTask(@PathVariable(value = "id") @Parameter(description = "SubTask ID", required = true) Long subTaskId, @RequestBody UpdateSubTaskDto updateSubTaskDto){
 		return ResponseEntity.ok(subTaskService.updateSubTask(subTaskId, updateSubTaskDto));

@@ -10,8 +10,8 @@ public class CreateTaskDto {
 	private String name;
 	@Schema(description = "Task description", name = "description", requiredMode = Schema.RequiredMode.REQUIRED, example = "Task description")
 	private String description;
-	@Schema(description = "Task's start date in format [dd/MM/yyyy HH:mm:ss]", name = "startDate", requiredMode = Schema.RequiredMode.REQUIRED, example = "dd/MM/yyyy HH:mm:ss")
+	@Schema(description = "Task's start date in format [dd/MM/yyyy HH:mm:ss]", name = "startDate", requiredMode = Schema.RequiredMode.REQUIRED, example = "01/01/2025 08:00:00")
 	private String startDate;
-	@Schema(description = "Task's finish date in format [dd/MM/yyyy HH:mm:ss]", name = "finishDate", requiredMode = Schema.RequiredMode.REQUIRED, example = "dd/MM/yyyy HH:mm:ss")
+	@Schema(description = "Task's finish date in format [dd/MM/yyyy HH:mm:ss]", name = "finishDate", requiredMode = Schema.RequiredMode.REQUIRED, example = "15/01/2025 08:00:00")
 	private String finishDate;
 }

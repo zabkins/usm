@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.zarczynski.usm.common.DtoValidator;
 import pl.zarczynski.usm.swaggerschemas.auth.ForbiddenProblemDetailSchema;
+import pl.zarczynski.usm.swaggerschemas.auth.InvalidJwtTokenProblemDetailSchema;
 import pl.zarczynski.usm.swaggerschemas.task.CreatedTaskPageContentSchema;
 import pl.zarczynski.usm.swaggerschemas.task.CreatedTaskSchema;
 import pl.zarczynski.usm.swaggerschemas.task.TaskNotFoundProblemDetailSchema;
@@ -28,7 +29,7 @@ import java.util.Optional;
 @RequestMapping("/tasks")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
-@Tag(name = "Tasks", description = "Task related REST requests")
+@Tag(name = "Tasks", description = "Task related requests")
 public class TaskController {
 
 	private final TaskService taskService;
@@ -38,7 +39,8 @@ public class TaskController {
 	@Operation(description = "Get task with given ID")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = TaskDto.class), mediaType = "application/json")}),
-			@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = TaskNotFoundProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = TaskNotFoundProblemDetailSchema.class), mediaType = "application/json"))
 	})
 	public ResponseEntity<TaskDto> getTask(@PathVariable @Parameter(description = "Task ID", required = true) Long id){
 		return ResponseEntity.ok(taskService.findTask(id));
@@ -48,6 +50,7 @@ public class TaskController {
 	@Operation(description = "Get all tasks")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = CreatedTaskPageContentSchema.class)), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json"))
 	})
 	public Page<TaskDto> getAllTasks(
 			@RequestParam @Parameter(description = "Page number", name = "page") Optional<Integer> page,
@@ -61,7 +64,8 @@ public class TaskController {
 	@Operation(description = "Create task")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = CreatedTaskSchema.class), mediaType = "application/json")}),
-			@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ForbiddenProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ForbiddenProblemDetailSchema.class), mediaType = "application/json"))
 	})
 	public ResponseEntity<TaskDto> createTask(@RequestBody CreateTaskDto taskDto){
 		dtoValidator.validate(taskDto);
@@ -72,7 +76,8 @@ public class TaskController {
 	@Operation(description = "Delete task")
 	@ApiResponses({
 			@ApiResponse(responseCode = "204", content = {@Content()}),
-			@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = TaskNotFoundProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = TaskNotFoundProblemDetailSchema.class), mediaType = "application/json"))
 
 	})
 	public ResponseEntity<TaskDto> deleteTask(@PathVariable Long id){
@@ -84,8 +89,9 @@ public class TaskController {
 	@Operation(description = "Update task")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = TaskDto.class), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json")),
 			@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ForbiddenProblemDetailSchema.class), mediaType = "application/json")),
-			@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = TaskNotFoundProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = TaskNotFoundProblemDetailSchema.class), mediaType = "application/json"))
 	})
 	public ResponseEntity<TaskDto> updateTask(@PathVariable @Parameter(description = "Task ID", required = true) Long id, @RequestBody UpdateTaskDto taskDto){
 		dtoValidator.validate(taskDto);

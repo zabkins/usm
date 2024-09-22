@@ -21,7 +21,7 @@ import pl.zarczynski.usm.authentication.dto.UserInfoDto;
 import pl.zarczynski.usm.common.DateHelper;
 import pl.zarczynski.usm.configuration.jwt.JwtService;
 import pl.zarczynski.usm.configuration.user.User;
-import pl.zarczynski.usm.swaggerschemas.task.TaskNotFoundProblemDetailSchema;
+import pl.zarczynski.usm.swaggerschemas.auth.InvalidJwtTokenProblemDetailSchema;
 
 import java.util.Date;
 
@@ -40,7 +40,7 @@ public class UserController {
 	@Operation(description = "Get information about currently authenticated user")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = UserInfoDto.class), mediaType = "application/json")}),
-			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = TaskNotFoundProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json")),
 	})
 	public ResponseEntity<UserInfoDto> authenticatedUser (@RequestHeader("Authorization") @Parameter(hidden = true) String authHeader) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

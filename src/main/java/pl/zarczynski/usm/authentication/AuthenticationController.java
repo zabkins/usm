@@ -1,10 +1,12 @@
 package pl.zarczynski.usm.authentication;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +24,7 @@ import pl.zarczynski.usm.configuration.user.User;
 import pl.zarczynski.usm.swaggerschemas.auth.BadCredentialsProblemDetailSchema;
 import pl.zarczynski.usm.swaggerschemas.auth.EmailInUseProblemDetailSchema;
 import pl.zarczynski.usm.swaggerschemas.auth.InvalidEmailProblemDetailSchema;
-import pl.zarczynski.usm.swaggerschemas.auth.TokenRefreshProblemDetailSchema;
+import pl.zarczynski.usm.swaggerschemas.auth.InvalidJwtTokenProblemDetailSchema;
 import pl.zarczynski.usm.common.DtoValidator;
 
 @RequestMapping("/auth")
@@ -71,9 +73,10 @@ public class AuthenticationController {
 	@Operation(description = "Refresh user token")
 	@ApiResponses({
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = LoginUserResponse.class), mediaType = "application/json")}),
-			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = TokenRefreshProblemDetailSchema.class), mediaType = "application/json")),
+			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json")),
 	})
-	public ResponseEntity<LoginUserResponse> refreshToken (@RequestHeader("Authorization") String authHeader) {
+	@SecurityRequirement(name = "bearerAuth")
+	public ResponseEntity<LoginUserResponse> refreshToken (@RequestHeader("Authorization") @Parameter(hidden = true) String authHeader) {
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 			throw new BadCredentialsException("Invalid token");
 		}
