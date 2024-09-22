@@ -1,4 +1,4 @@
-package pl.zarczynski.usm.subtask.controller;
+package pl.zarczynski.usm.subtask;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,13 +12,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.zarczynski.usm.swagger.subtask.SubTaskNotFoundProblemDetailSchema;
-import pl.zarczynski.usm.swagger.task.TaskNotFoundProblemDetailSchema;
+import pl.zarczynski.usm.swaggerschemas.subtask.SubTaskNotFoundProblemDetailSchema;
+import pl.zarczynski.usm.swaggerschemas.task.TaskNotFoundProblemDetailSchema;
 import pl.zarczynski.usm.subtask.dto.CreateSubTaskDto;
 import pl.zarczynski.usm.subtask.dto.SubTaskDto;
 import pl.zarczynski.usm.subtask.dto.UpdateSubTaskDto;
-import pl.zarczynski.usm.subtask.service.SubTaskService;
-import pl.zarczynski.usm.task.service.DtoValidator;
+import pl.zarczynski.usm.common.DtoValidator;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package pl.zarczynski.usm.swagger.task;
+package pl.zarczynski.usm.swaggerschemas.task;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package pl.zarczynski.usm.authentication;
+package pl.zarczynski.usm.authentication.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package pl.zarczynski.usm.task.controller;
+package pl.zarczynski.usm.task;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -10,17 +10,19 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.zarczynski.usm.swagger.auth.ForbiddenProblemDetailSchema;
-import pl.zarczynski.usm.swagger.task.TaskNotFoundProblemDetailSchema;
+import pl.zarczynski.usm.swaggerschemas.auth.ForbiddenProblemDetailSchema;
+import pl.zarczynski.usm.swaggerschemas.task.CreatedTaskPageContentSchema;
+import pl.zarczynski.usm.swaggerschemas.task.CreatedTaskSchema;
+import pl.zarczynski.usm.swaggerschemas.task.TaskNotFoundProblemDetailSchema;
 import pl.zarczynski.usm.task.dto.CreateTaskDto;
 import pl.zarczynski.usm.task.dto.TaskDto;
 import pl.zarczynski.usm.task.dto.UpdateTaskDto;
-import pl.zarczynski.usm.task.service.DtoValidator;
-import pl.zarczynski.usm.task.service.TaskService;
+import pl.zarczynski.usm.common.DtoValidator;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/tasks")
@@ -45,16 +47,20 @@ public class TaskController {
 	@GetMapping()
 	@Operation(description = "Get all tasks")
 	@ApiResponses({
-			@ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = TaskDto.class)), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "200", content = {@Content(array = @ArraySchema(schema = @Schema(implementation = CreatedTaskPageContentSchema.class)), mediaType = "application/json")}),
 	})
-	public ResponseEntity<List<TaskDto>> getAllTasks(){
-		return ResponseEntity.ok(taskService.findTasks());
+	public Page<TaskDto> getAllTasks(
+			@RequestParam @Parameter(description = "Page number", name = "page") Optional<Integer> page,
+			@RequestParam @Parameter(description = "Page's size", name = "size") Optional<Integer> size,
+			@RequestParam @Parameter(name = "sortBy", schema = @Schema(description = "SortBy value", type = "string",
+					allowableValues = {"id", "name", "description", "startDate", "finishDate", "status"})) Optional<String> sortBy){
+		return taskService.findTasks(page.orElse(0), size.orElse(10), sortBy.orElse("id"));
 	}
 
 	@PostMapping()
 	@Operation(description = "Create task")
 	@ApiResponses({
-			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = TaskDto.class), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = CreatedTaskSchema.class), mediaType = "application/json")}),
 			@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ForbiddenProblemDetailSchema.class), mediaType = "application/json")),
 	})
 	public ResponseEntity<TaskDto> createTask(@RequestBody CreateTaskDto taskDto){

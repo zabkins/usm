@@ -3,6 +3,7 @@ package pl.zarczynski.usm.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -14,6 +15,9 @@ import pl.zarczynski.usm.configuration.user.UserRepository;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableSpringDataWebSupport(
+		pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO
+)
 public class AppConfiguration {
 	private final UserRepository userRepository;
 

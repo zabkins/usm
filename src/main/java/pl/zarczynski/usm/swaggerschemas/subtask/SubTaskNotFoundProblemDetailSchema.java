@@ -1,21 +1,21 @@
-package pl.zarczynski.usm.swagger.auth;
+package pl.zarczynski.usm.swaggerschemas.subtask;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Schema(description = "Api Error details")
 @Getter
-public abstract class ForbiddenProblemDetailSchema {
+public abstract class SubTaskNotFoundProblemDetailSchema {
 	@Schema(name = "type", example = "about:blank")
 	private String type;
-	@Schema(name = "title", example = "Forbidden")
+	@Schema(name = "title", example = "Not Found")
 	private String title;
-	@Schema(name = "status", example = "403")
+	@Schema(name = "status", example = "404")
 	private Integer status;
-	@Schema(name = "detail", example = "Invalid startDate/finishDate format. Expected: dd/MM/yyyy HH:mm:ss")
+	@Schema(name = "detail", example = "SubTask with ID [1] not found")
 	private String detail;
 	@Schema(name = "instance", example = "/tasks/1")
 	private String instance;
-	@Schema(name = "description", example = "Request input is invalid")
+	@Schema(name = "description", example = "Resource not found")
 	private String description;
 }

@@ -13,13 +13,17 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+import pl.zarczynski.usm.authentication.dto.LoginUserRequest;
+import pl.zarczynski.usm.authentication.dto.LoginUserResponse;
+import pl.zarczynski.usm.authentication.dto.RegisterUserRequest;
+import pl.zarczynski.usm.authentication.dto.RegisterUserResponse;
 import pl.zarczynski.usm.configuration.jwt.JwtService;
 import pl.zarczynski.usm.configuration.user.User;
-import pl.zarczynski.usm.swagger.auth.BadCredentialsProblemDetailSchema;
-import pl.zarczynski.usm.swagger.auth.EmailInUseProblemDetailSchema;
-import pl.zarczynski.usm.swagger.auth.InvalidEmailProblemDetailSchema;
-import pl.zarczynski.usm.swagger.auth.TokenRefreshProblemDetailSchema;
-import pl.zarczynski.usm.task.service.DtoValidator;
+import pl.zarczynski.usm.swaggerschemas.auth.BadCredentialsProblemDetailSchema;
+import pl.zarczynski.usm.swaggerschemas.auth.EmailInUseProblemDetailSchema;
+import pl.zarczynski.usm.swaggerschemas.auth.InvalidEmailProblemDetailSchema;
+import pl.zarczynski.usm.swaggerschemas.auth.TokenRefreshProblemDetailSchema;
+import pl.zarczynski.usm.common.DtoValidator;
 
 @RequestMapping("/auth")
 @RestController

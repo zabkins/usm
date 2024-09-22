@@ -1,4 +1,4 @@
-package pl.zarczynski.usm.subtask.service;
+package pl.zarczynski.usm.subtask;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -14,7 +14,7 @@ import pl.zarczynski.usm.subtask.dto.UpdateSubTaskDto;
 import pl.zarczynski.usm.subtask.entity.SubTask;
 import pl.zarczynski.usm.task.entity.Task;
 import pl.zarczynski.usm.common.TaskMapper;
-import pl.zarczynski.usm.task.service.TaskRepository;
+import pl.zarczynski.usm.task.TaskRepository;
 
 import java.util.Collections;
 import java.util.List;

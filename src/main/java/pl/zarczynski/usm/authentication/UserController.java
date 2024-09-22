@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.zarczynski.usm.authentication.dto.UserInfoDto;
 import pl.zarczynski.usm.common.DateHelper;
 import pl.zarczynski.usm.configuration.jwt.JwtService;
 import pl.zarczynski.usm.configuration.user.User;
-import pl.zarczynski.usm.swagger.task.TaskNotFoundProblemDetailSchema;
+import pl.zarczynski.usm.swaggerschemas.task.TaskNotFoundProblemDetailSchema;
 
 import java.util.Date;
 

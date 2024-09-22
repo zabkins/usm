@@ -1,10 +1,9 @@
-package pl.zarczynski.usm.task.service;
+package pl.zarczynski.usm.common;
 
 import jakarta.validation.ValidationException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
-import pl.zarczynski.usm.authentication.RegisterUserRequest;
-import pl.zarczynski.usm.common.DateHelper;
+import pl.zarczynski.usm.authentication.dto.RegisterUserRequest;
 import pl.zarczynski.usm.task.dto.CreateTaskDto;
 import pl.zarczynski.usm.task.dto.UpdateTaskDto;
 import pl.zarczynski.usm.subtask.dto.CreateSubTaskDto;

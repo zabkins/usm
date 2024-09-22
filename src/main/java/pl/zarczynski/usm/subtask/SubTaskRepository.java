@@ -1,4 +1,4 @@
-package pl.zarczynski.usm.subtask.service;
+package pl.zarczynski.usm.subtask;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

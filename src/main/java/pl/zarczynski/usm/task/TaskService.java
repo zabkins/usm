@@ -1,8 +1,11 @@
-package pl.zarczynski.usm.task.service;
+package pl.zarczynski.usm.task;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,8 +18,6 @@ import pl.zarczynski.usm.task.dto.UpdateTaskDto;
 import pl.zarczynski.usm.task.entity.Task;
 
 import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,14 +26,12 @@ public class TaskService {
 	private final TaskRepository taskRepository;
 	private final TaskMapper taskMapper;
 
-	public List<TaskDto> findTasks () {
+	public Page<TaskDto> findTasks (Integer page, Integer size, String sortBy) {
 		User currentUser = getCurrentUser();
-		log.info("Finding tasks for user {}", currentUser.getEmail());
-		List<Task> foundTasks = taskRepository.findAllByUser(currentUser);
-		log.info("Found {} tasks. {}", foundTasks.size(), foundTasks);
-		return foundTasks.isEmpty() ? Collections.emptyList() : foundTasks.stream()
-				.map(taskMapper::toDto)
-				.toList();
+		log.info("Finding tasks for user {}. Fetch parameters: [page={},size={},sortBy={}]", currentUser.getEmail(), page, size, sortBy);
+		Page<Task> allTasksByUser = taskRepository.findAllByUser(currentUser, PageRequest.of(page, size, Sort.Direction.ASC, sortBy));
+		log.info("Found {} tasks. {}", allTasksByUser.getTotalElements(), allTasksByUser.getContent());
+		return allTasksByUser.map(taskMapper::toDto);
 	}
 
 	public TaskDto saveTask (CreateTaskDto taskDto) {
