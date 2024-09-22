@@ -22,7 +22,6 @@ import pl.zarczynski.usm.task.service.TaskService;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/tasks")
 @RequiredArgsConstructor

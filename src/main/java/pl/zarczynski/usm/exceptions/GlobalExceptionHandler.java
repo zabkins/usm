@@ -3,6 +3,7 @@ package pl.zarczynski.usm.exceptions;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.authentication.AccountStatusException;
@@ -14,10 +15,12 @@ import java.nio.file.AccessDeniedException;
 import java.security.SignatureException;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 	@ExceptionHandler(value = {Exception.class})
 	public ProblemDetail handleSecurityException (Exception exception) {
 		ProblemDetail errorDetail = null;
+		log.error("Error occured [{}]. StackTrace: {}", exception.getMessage(), exception.getStackTrace());
 		if (exception instanceof EntityNotFoundException) {
 			errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), exception.getMessage());
 			errorDetail.setProperty("description", "Resource not found");

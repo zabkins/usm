@@ -22,8 +22,6 @@ import pl.zarczynski.usm.task.service.DtoValidator;
 
 import java.util.List;
 
-
-
 @RestController
 @RequestMapping("/tasks")
 @RequiredArgsConstructor
