@@ -62,7 +62,7 @@ public class SubTaskService {
 		log.info("SubTask before update: {}", subTask);
 		updateSubTask(subTask, updateSubTaskDto);
 		SubTask updatedSubTask = subTaskRepository.save(subTask);
-		log.info("SubTask with id {} updated: {}", subTaskId, updatedSubTask);
+		log.info("SubTask after update: {}", updatedSubTask);
 		return taskMapper.toDto(updatedSubTask);
 	}
 

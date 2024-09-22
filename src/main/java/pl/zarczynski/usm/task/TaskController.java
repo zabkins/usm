@@ -7,12 +7,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.zarczynski.usm.common.DtoValidator;
 import pl.zarczynski.usm.swaggerschemas.auth.ForbiddenProblemDetailSchema;
 import pl.zarczynski.usm.swaggerschemas.task.CreatedTaskPageContentSchema;
 import pl.zarczynski.usm.swaggerschemas.task.CreatedTaskSchema;
@@ -20,14 +21,13 @@ import pl.zarczynski.usm.swaggerschemas.task.TaskNotFoundProblemDetailSchema;
 import pl.zarczynski.usm.task.dto.CreateTaskDto;
 import pl.zarczynski.usm.task.dto.TaskDto;
 import pl.zarczynski.usm.task.dto.UpdateTaskDto;
-import pl.zarczynski.usm.common.DtoValidator;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/tasks")
 @RequiredArgsConstructor
-@Slf4j
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Tasks", description = "Task related REST requests")
 public class TaskController {
 
@@ -54,7 +54,7 @@ public class TaskController {
 			@RequestParam @Parameter(description = "Page's size", name = "size") Optional<Integer> size,
 			@RequestParam @Parameter(name = "sortBy", schema = @Schema(description = "SortBy value", type = "string",
 					allowableValues = {"id", "name", "description", "startDate", "finishDate", "status"})) Optional<String> sortBy){
-		return taskService.findTasks(page.orElse(0), size.orElse(10), sortBy.orElse("id"));
+		return taskService.findTasks(page, size, sortBy);
 	}
 
 	@PostMapping()

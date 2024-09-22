@@ -1,10 +1,12 @@
 package pl.zarczynski.usm.authentication;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ import java.util.Date;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Slf4j
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "User", description = "Token holder's information")
 public class UserController {
 
@@ -39,7 +42,7 @@ public class UserController {
 			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = UserInfoDto.class), mediaType = "application/json")}),
 			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = TaskNotFoundProblemDetailSchema.class), mediaType = "application/json")),
 	})
-	public ResponseEntity<UserInfoDto> authenticatedUser (@RequestHeader("Authorization") String authHeader) {
+	public ResponseEntity<UserInfoDto> authenticatedUser (@RequestHeader("Authorization") @Parameter(hidden = true) String authHeader) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		User currentUser = (User) authentication.getPrincipal();
 		log.info("Preparing information about user {}", currentUser.getUsername());

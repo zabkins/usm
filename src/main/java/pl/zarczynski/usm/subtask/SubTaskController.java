@@ -7,24 +7,24 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.zarczynski.usm.swaggerschemas.subtask.SubTaskNotFoundProblemDetailSchema;
-import pl.zarczynski.usm.swaggerschemas.task.TaskNotFoundProblemDetailSchema;
+import pl.zarczynski.usm.common.DtoValidator;
 import pl.zarczynski.usm.subtask.dto.CreateSubTaskDto;
 import pl.zarczynski.usm.subtask.dto.SubTaskDto;
 import pl.zarczynski.usm.subtask.dto.UpdateSubTaskDto;
-import pl.zarczynski.usm.common.DtoValidator;
+import pl.zarczynski.usm.swaggerschemas.subtask.SubTaskNotFoundProblemDetailSchema;
+import pl.zarczynski.usm.swaggerschemas.task.TaskNotFoundProblemDetailSchema;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/tasks")
 @RequiredArgsConstructor
-@Slf4j
+@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "SubTasks", description = "SubTask related REST requests")
 public class SubTaskController {
 

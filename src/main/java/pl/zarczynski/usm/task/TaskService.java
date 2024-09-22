@@ -3,6 +3,7 @@ package pl.zarczynski.usm.task;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,7 @@ import pl.zarczynski.usm.task.dto.UpdateTaskDto;
 import pl.zarczynski.usm.task.entity.Task;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,11 +27,18 @@ import java.time.ZonedDateTime;
 public class TaskService {
 	private final TaskRepository taskRepository;
 	private final TaskMapper taskMapper;
+	@Value("${max.page.size:10}")
+	private Integer maxPageSize;
+	@Value("${default.sort-by:id}")
+	private String defaultSortBy;
 
-	public Page<TaskDto> findTasks (Integer page, Integer size, String sortBy) {
+	public Page<TaskDto> findTasks (Optional<Integer> page, Optional<Integer> size, Optional<String> sortBy) {
 		User currentUser = getCurrentUser();
-		log.info("Finding tasks for user {}. Fetch parameters: [page={},size={},sortBy={}]", currentUser.getEmail(), page, size, sortBy);
-		Page<Task> allTasksByUser = taskRepository.findAllByUser(currentUser, PageRequest.of(page, size, Sort.Direction.ASC, sortBy));
+		Integer pageNumber = page.orElse(0);
+		Integer pageSize = size.orElse(maxPageSize);
+		String toSortBy = sortBy.orElse(defaultSortBy);
+		log.info("Finding tasks for user {}. Fetch parameters: [page={},size={},sortBy={}]", currentUser.getEmail(), pageNumber, pageSize, toSortBy);
+		Page<Task> allTasksByUser = taskRepository.findAllByUser(currentUser, PageRequest.of(pageNumber, pageSize, Sort.Direction.ASC, toSortBy));
 		log.info("Found {} tasks. {}", allTasksByUser.getTotalElements(), allTasksByUser.getContent());
 		return allTasksByUser.map(taskMapper::toDto);
 	}
@@ -67,11 +76,12 @@ public class TaskService {
 		log.info("Updating task with id {}. Request data: {}", id, dto);
 		Task taskToUpdate = taskRepository.findByIdAndUser(id, getCurrentUser()).orElseThrow(
 				() -> new EntityNotFoundException("Task with ID [" + id + "] not found"));
+		log.info("Task before update: {}", taskToUpdate);
 		updateTask(taskToUpdate, dto);
 		Task updatedTask = taskRepository.save(taskToUpdate);
-		log.info("Task with id {} updated: {}", id, updatedTask);
+		log.info("Task after update: {}", updatedTask);
 		TaskDto taskDto = taskMapper.toDto(updatedTask);
-		log.info("Task updated. Returning {}", taskDto);
+		log.info("Returning {}", taskDto);
 		return taskDto;
 	}
 

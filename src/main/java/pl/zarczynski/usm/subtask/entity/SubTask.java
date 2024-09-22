@@ -22,6 +22,7 @@ public class SubTask {
 	private boolean isDone;
 	@ManyToOne
 	@JoinColumn(name = "task_id")
+	@ToString.Exclude
 	private Task task;
 
 	@Override
