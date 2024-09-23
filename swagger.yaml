@@ -1,0 +1,958 @@
+openapi: 3.0.1
+info:
+  title: UsersTaskManagement API
+  description: >-
+    JWT authentication based REST API. Unprotected /signup and /login endpoints
+    are meant to be used for authentication
+servers:
+  - url: http://localhost:8080
+    description: LocalHostURL
+tags:
+  - name: Authentication
+    description: Authentication API
+  - name: User
+    description: Token holder's information
+  - name: Tasks
+    description: Task related requests
+  - name: SubTasks
+    description: SubTask related requests
+paths:
+  /tasks/{id}:
+    get:
+      tags:
+        - Tasks
+      description: Get task with given ID
+      operationId: getTask
+      parameters:
+        - name: id
+          in: path
+          description: Task ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidJwtTokenProblemDetailSchema'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskNotFoundProblemDetailSchema'
+      security:
+        - bearerAuth: [ ]
+    put:
+      tags:
+        - Tasks
+      description: Update task
+      operationId: updateTask
+      parameters:
+        - name: id
+          in: path
+          description: Task ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidJwtTokenProblemDetailSchema'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenProblemDetailSchema'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskNotFoundProblemDetailSchema'
+      security:
+        - bearerAuth: [ ]
+    delete:
+      tags:
+        - Tasks
+      description: Delete task
+      operationId: deleteTask
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidJwtTokenProblemDetailSchema'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskNotFoundProblemDetailSchema'
+      security:
+        - bearerAuth: [ ]
+  /tasks/subtasks/{id}:
+    get:
+      tags:
+        - SubTasks
+      description: Get SubTask with given ID
+      operationId: findSubTask
+      parameters:
+        - name: id
+          in: path
+          description: SubTask ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubTaskDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidJwtTokenProblemDetailSchema'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubTaskNotFoundProblemDetailSchema'
+      security:
+        - bearerAuth: [ ]
+    put:
+      tags:
+        - SubTasks
+      description: Update SubTask
+      operationId: updateSubTask
+      parameters:
+        - name: id
+          in: path
+          description: SubTask ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSubTaskDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubTaskDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidJwtTokenProblemDetailSchema'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubTaskNotFoundProblemDetailSchema'
+      security:
+        - bearerAuth: [ ]
+    delete:
+      tags:
+        - SubTasks
+      description: Delete SubTask with given ID
+      operationId: deleteSubTask
+      parameters:
+        - name: id
+          in: path
+          description: SubTask ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidJwtTokenProblemDetailSchema'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubTaskNotFoundProblemDetailSchema'
+      security:
+        - bearerAuth: [ ]
+  /tasks:
+    get:
+      tags:
+        - Tasks
+      description: Get all tasks
+      operationId: getAllTasks
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          description: Page's size
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            description: SortBy value
+            enum:
+              - id
+              - name
+              - description
+              - startDate
+              - finishDate
+              - status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreatedTaskPageContentSchema'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidJwtTokenProblemDetailSchema'
+      security:
+        - bearerAuth: [ ]
+    post:
+      tags:
+        - Tasks
+      description: Create task
+      operationId: createTask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedTaskSchema'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidJwtTokenProblemDetailSchema'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenProblemDetailSchema'
+      security:
+        - bearerAuth: [ ]
+  /tasks/{id}/subtasks:
+    get:
+      tags:
+        - SubTasks
+      description: Get all SubTasks for Task of given ID
+      operationId: findAllSubTasks
+      parameters:
+        - name: id
+          in: path
+          description: Task ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubTaskDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidJwtTokenProblemDetailSchema'
+      security:
+        - bearerAuth: [ ]
+    post:
+      tags:
+        - SubTasks
+      description: Create subtask for task with given ID
+      operationId: createSubTask
+      parameters:
+        - name: id
+          in: path
+          description: Task ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubTaskDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubTaskDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidJwtTokenProblemDetailSchema'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskNotFoundProblemDetailSchema'
+      security:
+        - bearerAuth: [ ]
+  /auth/signup:
+    post:
+      tags:
+        - Authentication
+      description: Register user
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterUserResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailInUseProblemDetailSchema'
+  /auth/refresh:
+    post:
+      tags:
+        - Authentication
+      description: Refresh user token
+      operationId: refreshToken
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginUserResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidJwtTokenProblemDetailSchema'
+      security:
+        - bearerAuth: [ ]
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      description: Login
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginUserResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsProblemDetailSchema'
+  /users/me:
+    get:
+      tags:
+        - User
+      description: Get information about currently authenticated user
+      operationId: authenticatedUser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidJwtTokenProblemDetailSchema'
+      security:
+        - bearerAuth: [ ]
+components:
+  schemas:
+    UpdateTaskDto:
+      required:
+        - description
+        - finishDate
+        - name
+        - startDate
+        - status
+      type: object
+      properties:
+        name:
+          type: string
+          description: Task name
+          example: Task name
+        description:
+          type: string
+          description: Task description
+          example: Task description
+        startDate:
+          type: string
+          description: Task's start date in format [dd/MM/yyyy HH:mm:ss]
+          example: 01/01/2025 08:00:00
+        finishDate:
+          type: string
+          description: Task's finish date in format [dd/MM/yyyy HH:mm:ss]
+          example: 15/01/2025 08:00:00
+        status:
+          type: string
+          description: Task's status
+          example: PLANNED
+          enum:
+            - PLANNED
+            - IN_PROGRESS
+            - DONE
+            - CANCELLED
+            - PLANNED
+            - IN_PROGRESS
+            - DONE
+            - CANCELLED
+      description: DTO used for updating a task
+    InvalidJwtTokenProblemDetailSchema:
+      type: object
+      properties:
+        type:
+          type: string
+          example: about:blank
+        title:
+          type: string
+          example: Unauthorized
+        status:
+          type: integer
+          format: int32
+          example: 401
+        detail:
+          type: string
+          example: Invalid JWT Token
+        instance:
+          type: string
+          example: /auth/signup
+        description:
+          type: string
+          example: JWT provided in the request is invalid
+      description: Api Error details
+    ForbiddenProblemDetailSchema:
+      type: object
+      properties:
+        type:
+          type: string
+          example: about:blank
+        title:
+          type: string
+          example: Forbidden
+        status:
+          type: integer
+          format: int32
+          example: 403
+        detail:
+          type: string
+          example: 'Invalid startDate/finishDate format. Expected: dd/MM/yyyy HH:mm:ss'
+        instance:
+          type: string
+          example: /tasks/1
+        description:
+          type: string
+          example: Request input is invalid
+      description: Api Error details
+    SubTaskDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: SubTask's ID
+          format: int64
+          example: 1
+        name:
+          type: string
+          description: SubTask's name
+          example: SubTask name
+        description:
+          type: string
+          description: SubTask's description
+          example: SubTask description
+        done:
+          type: boolean
+      description: DTO representing SubTask
+    TaskDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of the task
+          format: int64
+          example: 1
+        name:
+          type: string
+          description: Name of the task
+          example: Task name
+        description:
+          type: string
+          description: Description of the task
+          example: Task description
+        startDate:
+          type: string
+          description: Date when task starts
+          example: 21/01/2024 08:00:00 CEST
+        finishDate:
+          type: string
+          description: Date when task ends
+          example: 25/01/2024 16:00:00 CEST
+        status:
+          type: string
+          description: Status of the task
+          example: PLANNED
+          enum:
+            - PLANNED
+            - IN_PROGRESS
+            - DONE
+            - CANCELLED
+        subTasks:
+          type: array
+          description: SubTasks of the task
+          items:
+            $ref: '#/components/schemas/SubTaskDto'
+      description: DTO used for representing a task
+    TaskNotFoundProblemDetailSchema:
+      type: object
+      properties:
+        type:
+          type: string
+          example: about:blank
+        title:
+          type: string
+          example: Not Found
+        status:
+          type: integer
+          format: int32
+          example: 404
+        detail:
+          type: string
+          example: Task with ID [1] not found
+        instance:
+          type: string
+          example: /tasks/1
+        description:
+          type: string
+          example: Resource not found
+      description: Api Error details
+    UpdateSubTaskDto:
+      required:
+        - description
+        - done
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: SubTask name
+          example: SubTask name
+        description:
+          type: string
+          description: SubTask description
+          example: SubTask description
+        done:
+          type: boolean
+          description: SubTask's done status
+          example: true
+          enum:
+            - true
+            - false
+      description: DTO for updating a SubTask
+    SubTaskNotFoundProblemDetailSchema:
+      type: object
+      properties:
+        type:
+          type: string
+          example: about:blank
+        title:
+          type: string
+          example: Not Found
+        status:
+          type: integer
+          format: int32
+          example: 404
+        detail:
+          type: string
+          example: SubTask with ID [1] not found
+        instance:
+          type: string
+          example: /tasks/1
+        description:
+          type: string
+          example: Resource not found
+      description: Api Error details
+    CreateTaskDto:
+      required:
+        - description
+        - finishDate
+        - name
+        - startDate
+      type: object
+      properties:
+        name:
+          type: string
+          description: Task name
+          example: Task name
+        description:
+          type: string
+          description: Task description
+          example: Task description
+        startDate:
+          type: string
+          description: Task's start date in format [dd/MM/yyyy HH:mm:ss]
+          example: 01/01/2025 08:00:00
+        finishDate:
+          type: string
+          description: Task's finish date in format [dd/MM/yyyy HH:mm:ss]
+          example: 15/01/2025 08:00:00
+      description: DTO used for creating a task
+    CreatedTaskSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of the task
+          format: int64
+          example: 1
+        name:
+          type: string
+          description: Name of the task
+          example: Task name
+        description:
+          type: string
+          description: Description of the task
+          example: Task description
+        startDate:
+          type: string
+          description: Date when task starts
+          example: 21/01/2024 08:00:00 CEST
+        finishDate:
+          type: string
+          description: Date when task ends
+          example: 25/01/2024 16:00:00 CEST
+        status:
+          type: string
+          description: Status of the task
+          example: PLANNED
+          enum:
+            - PLANNED
+            - IN_PROGRESS
+            - DONE
+            - CANCELLED
+        subTasks:
+          type: string
+          description: SubTasks of the task
+          example: '[]'
+      description: DTO used for representing a task
+    CreateSubTaskDto:
+      required:
+        - description
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: SubTask name
+          example: SubTask name
+        description:
+          type: string
+          description: SubTask description
+          example: SubTask description
+      description: DTO for creating a SubTask
+    RegisterUserRequest:
+      required:
+        - email
+        - fullName
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+          description: User's email address
+          example: john.doe@gmail.com
+        password:
+          type: string
+          description: User's password
+          example: johnDoe123
+        fullName:
+          type: string
+          description: User's full name
+          example: John Doe
+      description: DTO Used for user registration
+    RegisterUserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: User's ID
+          format: int32
+          example: 1
+        fullName:
+          type: string
+          description: User's full name
+          example: John Doe
+        email:
+          type: string
+          description: User's email
+          example: john.doe@gmail.com
+        createdAt:
+          type: string
+          description: User's creation date
+          example: 30/01/2024 10:00:00 CEST
+        updatedAt:
+          type: string
+          description: User's update date
+          example: 30/01/2024 10:30:00 CEST
+      description: Register user response
+    EmailInUseProblemDetailSchema:
+      type: object
+      properties:
+        type:
+          type: string
+          example: about:blank
+        title:
+          type: string
+          example: Unauthorized
+        status:
+          type: integer
+          format: int32
+          example: 401
+        detail:
+          type: string
+          example: Email is already in use
+        instance:
+          type: string
+          example: /auth/signup
+        description:
+          type: string
+          example: The username or password is incorrect
+      description: Api Error details
+    LoginUserResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Access token
+          example: >-
+            eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTcyNjczODM4MCwiZXhwIjoxNzI2NzQxOTgwfQ.1-PnIbSgqiZfHSBOPtbfPvbuT58O88v03RqCwXMgC5X0N8OM-WvVKSQGIyI3aeCr
+        expiresIn:
+          type: integer
+          description: Access token expiration
+          format: int64
+          example: 3600000
+      description: User login response
+    LoginUserRequest:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+          description: User's email address
+          example: john.doe@gmail.com
+        password:
+          type: string
+          description: User's password
+          example: johnDoe123
+      description: User's login credentials
+    BadCredentialsProblemDetailSchema:
+      type: object
+      properties:
+        type:
+          type: string
+          example: about:blank
+        title:
+          type: string
+          example: Unauthorized
+        status:
+          type: integer
+          format: int32
+          example: 401
+        detail:
+          type: string
+          example: Bad Credentials
+        instance:
+          type: string
+          example: /auth/login
+        description:
+          type: string
+          example: The username or password is incorrect
+      description: Api Error details
+    UserInfoDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: User's full name
+          example: John Doe
+        email:
+          type: string
+          description: User's email
+          example: john.doe@gmail.com
+        createdAt:
+          type: string
+          description: User's creation date
+          example: 30/01/2024 10:00:00 CEST
+        updatedAt:
+          type: string
+          description: User's update date
+          example: 30/01/2024 10:30:00 CEST
+        expiration:
+          type: string
+          description: User's token expiration date
+          example: 30/01/2024 12:30:00 CEST. Valid for 3400s
+        expired:
+          type: boolean
+      description: User information DTO
+    CreatedTaskPageContentSchema:
+      type: object
+      properties:
+        content:
+          type: array
+          description: Fetched tasks
+          items:
+            $ref: '#/components/schemas/TaskDto'
+        page:
+          $ref: '#/components/schemas/PageSchema'
+      description: Page with list of fetched tasks
+    PageSchema:
+      type: object
+      properties:
+        size:
+          type: integer
+          description: Page size
+          format: int32
+          example: 5
+        number:
+          type: integer
+          description: Page number
+          format: int32
+          example: 0
+        totalElements:
+          type: integer
+          description: Total number of elements found
+          format: int32
+          example: 1
+        totalPage:
+          type: integer
+          description: Total pages found
+          format: int32
+          example: 1
+      description: Page details
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
