@@ -4,6 +4,7 @@ import jakarta.validation.ValidationException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import pl.zarczynski.usm.authentication.dto.RegisterUserRequest;
+import pl.zarczynski.usm.subtask.dto.UpdateSubTaskDto;
 import pl.zarczynski.usm.task.dto.CreateTaskDto;
 import pl.zarczynski.usm.task.dto.UpdateTaskDto;
 import pl.zarczynski.usm.subtask.dto.CreateSubTaskDto;
@@ -37,6 +38,11 @@ public class DtoValidator {
 	public void validate (CreateSubTaskDto subTaskDto) {
 		validateNotNull(subTaskDto.getName(), "name");
 		validateNotNull(subTaskDto.getDescription(), "description");
+	}
+
+	public void validate (UpdateSubTaskDto updateSubTaskDto) {
+		validateNotNull(updateSubTaskDto.getName(), "name");
+		validateNotNull(updateSubTaskDto.getDescription(), "description");
 	}
 
 	private void validateNotNull(Object fieldValue, String fieldName) {

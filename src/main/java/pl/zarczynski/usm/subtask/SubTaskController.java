@@ -85,6 +85,7 @@ public class SubTaskController {
 			@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = SubTaskNotFoundProblemDetailSchema.class), mediaType = "application/json"))
 	})
 	public ResponseEntity<SubTaskDto> updateSubTask(@PathVariable(value = "id") @Parameter(description = "SubTask ID", required = true) Long subTaskId, @RequestBody UpdateSubTaskDto updateSubTaskDto){
+		dtoValidator.validate(updateSubTaskDto);
 		return ResponseEntity.ok(subTaskService.updateSubTask(subTaskId, updateSubTaskDto));
 	}
 }
