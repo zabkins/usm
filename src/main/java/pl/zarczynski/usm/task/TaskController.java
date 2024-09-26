@@ -63,13 +63,13 @@ public class TaskController {
 	@PostMapping()
 	@Operation(description = "Create task")
 	@ApiResponses({
-			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = CreatedTaskSchema.class), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "201", content = {@Content(schema = @Schema(implementation = CreatedTaskSchema.class), mediaType = "application/json")}),
 			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json")),
 			@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ForbiddenProblemDetailSchema.class), mediaType = "application/json"))
 	})
 	public ResponseEntity<TaskDto> createTask(@RequestBody CreateTaskDto taskDto){
 		dtoValidator.validate(taskDto);
-		return ResponseEntity.ok(taskService.saveTask(taskDto));
+		return ResponseEntity.status(201).body(taskService.saveTask(taskDto));
 	}
 
 	@DeleteMapping("/{id}")

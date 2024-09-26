@@ -41,7 +41,7 @@ public class AuthenticationController {
 	@PostMapping("/signup")
 	@Operation(description = "Register user")
 	@ApiResponses({
-			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = RegisterUserResponse.class), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "201", content = {@Content(schema = @Schema(implementation = RegisterUserResponse.class), mediaType = "application/json")}),
 			@ApiResponse(responseCode = "401", content = {@Content(schema = @Schema(implementation = EmailInUseProblemDetailSchema.class), mediaType = "application/json")}),
 			@ApiResponse(responseCode = "401", content = {@Content(schema = @Schema(implementation = InvalidEmailProblemDetailSchema.class), mediaType = "application/json")})
 	})
@@ -51,7 +51,7 @@ public class AuthenticationController {
 		User registeredUser = authenticationService.signUp(dto);
 		RegisterUserResponse response = new RegisterUserResponse(registeredUser);
 		log.info("Registered user: {}", response);
-		return ResponseEntity.ok(response);
+		return ResponseEntity.status(201).body(response);
 	}
 
 	@PostMapping("/login")

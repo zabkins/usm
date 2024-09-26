@@ -51,7 +51,7 @@ public class SubTaskControllerIntegrationTest {
 						.content(objectMapper.writeValueAsString(getCreateTaskDto()))
 						.header("Authorization", "Bearer " + loginUserResponse.getToken())
 						.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
+				.andExpect(status().isCreated())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON));
 		//create SubTask
 		mockMvc.perform(post("/tasks/1/subtasks")
@@ -60,7 +60,7 @@ public class SubTaskControllerIntegrationTest {
 						.accept(MediaType.APPLICATION_JSON)
 						.header("Authorization", "Bearer " + loginUserResponse.getToken())
 				)
-				.andExpect(status().isOk())
+				.andExpect(status().isCreated())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.id").value(1));
 		//create secondSubTask
@@ -70,7 +70,7 @@ public class SubTaskControllerIntegrationTest {
 						.accept(MediaType.APPLICATION_JSON)
 						.header("Authorization", "Bearer " + loginUserResponse.getToken())
 				)
-				.andExpect(status().isOk())
+				.andExpect(status().isCreated())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.id").value(2));
 		//updateSubTask

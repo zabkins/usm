@@ -35,13 +35,13 @@ public class SubTaskController {
 	@PostMapping("/{id}/subtasks")
 	@Operation(description = "Create subtask for task with given ID")
 	@ApiResponses({
-			@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = SubTaskDto.class), mediaType = "application/json")}),
+			@ApiResponse(responseCode = "201", content = {@Content(schema = @Schema(implementation = SubTaskDto.class), mediaType = "application/json")}),
 			@ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = InvalidJwtTokenProblemDetailSchema.class), mediaType = "application/json")),
 			@ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = TaskNotFoundProblemDetailSchema.class), mediaType = "application/json"))
 	})
 	public ResponseEntity<SubTaskDto> createSubTask(@PathVariable(value = "id") @Parameter(description = "Task ID", required = true) Long taskId, @RequestBody CreateSubTaskDto subTaskDto){
 		dtoValidator.validate(subTaskDto);
-		return ResponseEntity.ok(subTaskService.saveSubTask(taskId, subTaskDto));
+		return ResponseEntity.status(201).body(subTaskService.saveSubTask(taskId, subTaskDto));
 	}
 
 	@GetMapping("/subtasks/{id}")

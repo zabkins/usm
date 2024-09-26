@@ -47,7 +47,7 @@ public class AuthenticationControllerIntegrationTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(dto))
 						.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
+				.andExpect(status().isCreated());
 		assert(userRepository.findByEmail("user2@gmail.com").isPresent());
 	}
 

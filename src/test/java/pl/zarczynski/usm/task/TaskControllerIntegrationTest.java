@@ -51,7 +51,7 @@ public class TaskControllerIntegrationTest {
 						.content(objectMapper.writeValueAsString(getCreateTaskDto()))
 						.header("Authorization", "Bearer " + loginUserResponse.getToken())
 						.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
+				.andExpect(status().isCreated())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.id").value(1));
 		mockMvc.perform(post("/tasks")
@@ -59,7 +59,7 @@ public class TaskControllerIntegrationTest {
 						.content(objectMapper.writeValueAsString(getCreateTaskDto()))
 						.header("Authorization", "Bearer " + loginUserResponse.getToken())
 						.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
+				.andExpect(status().isCreated())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.id").value(2));
 		//find
