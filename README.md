@@ -7,6 +7,18 @@
 ```bash
 https://zabkins.github.io/usm/
 ```
+
+<h2>💻 Built with</h2>
+
+Technologies used in the project:
+
+*   Java 21
+*   Spring Boot 3.3.3
+*   Spring Security 6.3.3
+*   JUnit5
+*   JJWT 0.12.6
+*   OpenAPI 3.0.0
+
 <h2>🛠️ Run Locally using IDE</h2>
 Clone the project
 
@@ -34,14 +46,3 @@ Pull image from Dockerhub using
   docker pull zabkins/ustm-app
 ```
 And run the container
-  
-<h2>💻 Built with</h2>
-
-Technologies used in the project:
-
-*   Java 21
-*   Spring Boot 3.3.3
-*   Spring Security 6.3.3
-*   JUnit5
-*   JJWT 0.12.6
-*   OpenAPI 3.0.0
