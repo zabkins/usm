@@ -3,10 +3,7 @@
 <p id="description">Simple REST API built based on JWT Authentication.</p>
 
 <h2>API Endpoints documentation</h2>
-```
-  https://zabkins.github.io/usm/
-```
-
+https://zabkins.github.io/usm/
 <h2>🛠️ Run Locally using IDE</h2>
 Clone the project
 
