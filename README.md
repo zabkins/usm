@@ -1,16 +1,38 @@
 <h1 align="center" id="title">User's tasks management API</h1>
 
-<p id="description">Simple REST API built based on JWT Authentication. API Documented with OpenApi 3.0.0 here https://zabkins.github.io/usm/</p>
+<p id="description">Simple REST API built based on JWT Authentication.</p>
 
-<h2>🛠️ Installation Steps:</h2>
-
-<p>1. TODO</p>
-
+<h2>API Endpoints documentation</h2>
 ```
-todo
+  https://zabkins.github.io/usm/
 ```
 
-  
+<h2>🛠️ Run Locally using IDE</h2>
+Clone the project
+
+```bash
+  git clone https://github.com/zabkins/usm.git
+```
+
+[Option A] Then open project using IDE of your choice and run UsmApplication.<br>
+[Option B] Go to the project directory using
+```bash
+  cd ustm/
+```
+Then build project using
+```bash
+  mvn clean install
+```
+Then run
+```bash
+  java -jar /target/ustm-0.0.1-SNAPSHOT.jar
+```
+<h2>🛠️ Run Locally using Docker Image</h2>
+Pull image from Dockerhub using
+```bash
+  docker pull zabkins/ustm-app
+```
+And run the container
   
 <h2>💻 Built with</h2>
 
