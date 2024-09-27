@@ -17,7 +17,7 @@ Clone the project
 [Option A] Then open project using IDE of your choice and run UsmApplication.<br>
 [Option B] Go to the project directory using
 ```bash
-  cd ustm/
+  cd usm/
 ```
 Then build project using
 ```bash
