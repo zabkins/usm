@@ -3,7 +3,10 @@
 <p id="description">Simple REST API built based on JWT Authentication.</p>
 
 <h2>API Endpoints documentation</h2>
+
+```bash
 https://zabkins.github.io/usm/
+```
 <h2>🛠️ Run Locally using IDE</h2>
 Clone the project
 
@@ -20,11 +23,12 @@ Then build project using
 ```bash
   mvn clean install
 ```
-Then run
+Run command
 ```bash
   java -jar /target/ustm-0.0.1-SNAPSHOT.jar
 ```
 <h2>🛠️ Run Locally using Docker Image</h2>
+
 Pull image from Dockerhub using
 ```bash
   docker pull zabkins/ustm-app
